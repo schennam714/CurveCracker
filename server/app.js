@@ -7,6 +7,8 @@ require('dotenv').config();
 // Initialize Express app
 const app = express();
 
+app.use('/api/user', authRoutes);
+
 // Use bodyParser middleware
 app.use(bodyParser.json());
 
