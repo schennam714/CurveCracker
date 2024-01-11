@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
     const { studentId, email, password } = req.body;
+    console.log("Request Body:", req.body);
     
     // Ensure UT Austin email
     if (!email.endsWith('@utexas.edu')) {
@@ -20,9 +21,11 @@ router.post('/register', async (req, res) => {
     // Create new student
     let student = new Student({ studentId, email, password: hashedPassword });
     await student.save();
+    console.log("Student Registered:", student);
 
     res.status(201).send('Student registered');
   } catch (error) {
+    console.error("Registration Error:", error);
     res.status(500).send('Error registering student');
   }
 });

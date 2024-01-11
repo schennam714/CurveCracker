@@ -2,15 +2,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const authRoutes = require('./routes/authRoutes');
+
 require('dotenv').config();
 
 // Initialize Express app
 const app = express();
 
-app.use('/api/user', authRoutes);
-
 // Use bodyParser middleware
 app.use(bodyParser.json());
+app.use('/api/user', authRoutes);
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

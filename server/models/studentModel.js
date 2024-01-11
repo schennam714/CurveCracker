@@ -12,6 +12,10 @@ const StudentSchema = new mongoose.Schema({
     unique: true,
     match: [/@utexas.edu$/, 'Please use a UT Austin email']
   },
+  password: {
+    type: String,
+    required: true
+  },
   classes: [{
     classId: {
       type: mongoose.Schema.Types.ObjectId,
