@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
+const classRoutes = require('./routes/classRoutes');
 
 require('dotenv').config();
 
@@ -12,6 +13,7 @@ const app = express();
 // Use bodyParser middleware
 app.use(bodyParser.json());
 app.use('/api/user', authRoutes);
+app.use('/api/class', classRoutes);
 
 
 // MongoDB connection

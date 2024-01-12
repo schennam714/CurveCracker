@@ -10,10 +10,7 @@ const ClassSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  students: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student'
-  }]
+  students: [String]
 });
 
 module.exports = mongoose.model('Class', ClassSchema);
