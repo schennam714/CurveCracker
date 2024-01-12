@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/api/user', authRoutes);
 app.use('/api/class', classRoutes);
+app.use('/api/student', studentRoutes);
 
 
 // MongoDB connection
