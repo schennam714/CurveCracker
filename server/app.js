@@ -4,12 +4,16 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
 const studentRoutes = require('./routes/studentRoutes');
+const cors = require('cors');
+const helmet = require('helmet');
 
 require('dotenv').config();
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
+app.use(helmet());
 app.use('/api/user', authRoutes);
 app.use('/api/class', classRoutes);
 app.use('/api/student', studentRoutes);
