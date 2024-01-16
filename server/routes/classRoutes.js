@@ -3,12 +3,10 @@ const router = express.Router();
 const Class = require('../models/classModel');
 const calculateDistribution = require('../utility/gradeDistribution');
 
-// POST request to create a new class
 router.post('/create', async (req, res) => {
     try {
         const { name, identifier } = req.body;
     
-        // Check if class already exists
         const existingClass = await Class.findOne({ identifier });
         if (existingClass) {
           return res.status(400).send('Class already exists with this identifier');
@@ -22,7 +20,6 @@ router.post('/create', async (req, res) => {
       }
 });
 
-// POST request for a student to join a class
 router.post('/join', async (req, res) => {
     try {
       const { studentId, classIdentifier } = req.body;
@@ -33,7 +30,6 @@ router.post('/join', async (req, res) => {
         return res.status(404).send('Class not found');
       }
   
-      // Check if student already enrolled
       if (foundClass.students.includes(studentId)) {
         return res.status(400).send('Student already enrolled in this class');
       }
