@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Class = require('../models/classModel');
+const calculateDistribution = require('../utility/gradeDistribution');
 
 // POST request to create a new class
 router.post('/create', async (req, res) => {
@@ -25,6 +26,7 @@ router.post('/create', async (req, res) => {
 router.post('/join', async (req, res) => {
     try {
       const { studentId, classIdentifier } = req.body;
+      
   
       const foundClass = await Class.findOne({ identifier: classIdentifier });
       if (!foundClass) {
@@ -36,12 +38,12 @@ router.post('/join', async (req, res) => {
         return res.status(400).send('Student already enrolled in this class');
       }
   
-      foundClass.students.push(studentId);
+      foundClass.students.push({ studentId, score: null });
       await foundClass.save();
       res.status(200).send('Joined class successfully');
     } catch (error) {
       res.status(500).send('Error joining class: ' + error.message);
     }
   });
-
+  
   module.exports = router;

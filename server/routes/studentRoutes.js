@@ -2,61 +2,54 @@ const express = require('express');
 const router = express.Router();
 const Class = require('../models/classModel');
 const Student = require('../models/studentModel');
+const calculateDistribution = require('../utility/gradeDistribution');
 router.post('/submitScore', async (req, res) => {
     try {
-      const { studentId, classId, score } = req.body;
-      const student = await Student.findOne({ studentId: studentId });
+        const { studentId, classId, score } = req.body;
+        const classData = await Class.findOneAndUpdate(
+            { "_id": classId, "students.studentId": studentId },
+            { "$set": { "students.$.score": score } },
+            { new: true }
+        );
 
-      if (!student) {
-        return res.status(404).send('Student not found');
-      }
-  
-      const classIndex = student.classes.findIndex(c => c.classId.equals(classId));
-      if (classIndex >= 0) {
-        // Update existing score
-        student.classes[classIndex].score = score;
-      } else {
-        // Add new class and score
-        student.classes.push({ classId, score });
-      }
-  
-      await student.save();
-      res.status(200).send('Score submitted successfully');
+        if (!classData) {
+            return res.status(404).send('Class not found or student not in class');
+        }
+
+        res.status(200).send('Score submitted successfully');
     } catch (error) {
-      res.status(500).send('Error submitting score: ' + error.message);
+        res.status(500).send('Error submitting score: ' + error.message);
     }
 });
 
 router.get('/viewScores/:classId', async (req, res) => {
     try {
-      const { classId } = req.params;
-      const students = await Student.find({'classes.classId': classId}, 'studentId classes.$');
-  
-      if (students.length === 0) {
-        return res.status(404).send('No students found for this class');
-      }
-  
-      const scoreData = students.map(student => {
-        return {
-          studentId: student.studentId,
-          score: student.classes[0].score  // Assuming classes.$ returns the matched class
-        };
-      });
-  
-      res.status(200).send(scoreData);
+        const { classId } = req.params;
+        const classData = await Class.findById(classId);
+
+        if (!classData || classData.students.length === 0) {
+            return res.status(404).send('No students found for this class');
+        }
+
+        const scoreData = classData.students
+                            .filter(s => s.score != null)
+                            .map(s => ({
+                                studentId: s.studentId,
+                                score: s.score
+                            }));
+
+        res.status(200).json(scoreData);
     } catch (error) {
-      res.status(500).send('Error retrieving scores: ' + error.message);
+        res.status(500).send('Error retrieving scores: ' + error.message);
     }
 });
 
-const allowedUpdateFields = ['password'];  // Add more fields as per your requirements
+const allowedUpdateFields = ['password'];  
 
-// PUT request to update student profile
 router.put('/update', async (req, res) => {
   try {
     const { studentId, updatedData } = req.body;
 
-    // Validate updatedData
     const updateKeys = Object.keys(updatedData);
     console.log(updateKeys);
     const isValidUpdate = updateKeys.every(key => allowedUpdateFields.includes(key));
@@ -64,8 +57,6 @@ router.put('/update', async (req, res) => {
     if (!isValidUpdate) {
       return res.status(400).send('Invalid update fields');
     }
-
-    // Add more validations as per your schema if needed
 
     const student = await Student.findOneAndUpdate({ studentId }, updatedData, { new: true, runValidators: true });
 
@@ -77,6 +68,32 @@ router.put('/update', async (req, res) => {
   } catch (error) {
     res.status(500).send('Error updating student: ' + error.message);
   }
+});
+
+router.get('/distribution/:classId/:studentId', async (req, res) => {
+    try {
+        const { classId, studentId } = req.params;
+        const classData = await Class.findById(classId);
+
+        if (!classData) {
+            return res.status(404).send('Class not found');
+        }
+
+        const scores = classData.students
+                        .filter(s => s.score != null)
+                        .map(s => s.score);
+        const distribution = calculateDistribution(scores);
+
+        const studentEntry = classData.students.find(s => s.studentId === studentId);
+        if (!studentEntry) {
+            return res.status(404).send('Student not found in class');
+        }
+
+        const studentRank = distribution.find(d => d.score === studentEntry.score);
+        res.status(200).json(studentRank);
+    } catch (error) {
+        res.status(500).send('Error calculating distribution: ' + error.message);
+    }
 });
 module.exports = router;
   

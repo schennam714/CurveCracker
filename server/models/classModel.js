@@ -10,7 +10,10 @@ const ClassSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  students: [String]
+  students: [{
+    studentId: String,
+    score: Number
+  }]
 });
 
 module.exports = mongoose.model('Class', ClassSchema);
