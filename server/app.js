@@ -1,15 +1,15 @@
 var express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
-const classRoutes = require('./routes/classRoutes');
-const studentRoutes = require('./routes/studentRoutes');
-const cors = require('cors');
-const helmet = require('helmet');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var authRoutes = require('./routes/authRoutes');
+var classRoutes = require('./routes/classRoutes');
+var studentRoutes = require('./routes/studentRoutes');
+var cors = require('cors');
+var helmet = require('helmet');
 
 require('dotenv').config();
 
-const app = express();
+var app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
