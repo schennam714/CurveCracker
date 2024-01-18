@@ -15,20 +15,15 @@ const Register: React.FC = () => {
     setError('');
 
     try {
-      // Replace with your registration endpoint
       const response = await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/user/register', {
         studentId,
         email,
         password,
-        // Include other data as needed
       });
-      
-      // Handle response
-      // Navigate to login or dashboard page as appropriate
-      navigate('/'); // Example redirection
+      navigate('/'); 
     } catch (error: any) {
         console.log(error);
-      setError('Error during registration'); // Update error message based on actual response
+      setError('Error during registration'); 
     }
   };
 
