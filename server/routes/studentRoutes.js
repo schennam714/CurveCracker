@@ -95,5 +95,27 @@ router.get('/distribution/:classId/:studentId', async (req, res) => {
         res.status(500).send('Error calculating distribution: ' + error.message);
     }
 });
+router.get('/classes/:studentId', async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const student = await Student.findOne({ studentId }).populate('classes.classId');
+
+        if (!student) {
+            return res.status(404).send('Student not found');
+        }
+
+        const classList = student.classes.map(item => {
+            return {
+                classId: item.classId._id,
+                className: item.classId.name,
+                identifier: item.classId.identifier
+            };
+        });
+
+        res.json(classList);
+    } catch (error) {
+        res.status(500).send('Server error: ' + error.message);
+    }
+});
 module.exports = router;
   
