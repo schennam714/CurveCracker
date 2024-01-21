@@ -22,24 +22,27 @@ router.post('/create', async (req, res) => {
 
 router.post('/join', async (req, res) => {
   try {
-    const { studentId, classIdentifier } = req.body;
-    
-    const foundClass = await Class.findOne({ identifier: classIdentifier });
-    if (!foundClass) {
-      return res.status(404).send('Class not found');
-    }
-
-    const isAlreadyEnrolled = foundClass.students.some(student => student.studentId === studentId);
-    if (isAlreadyEnrolled) {
-      return res.status(400).send('Student already enrolled in this class');
-    }
-
-    foundClass.students.push({ studentId, score: null });
-    await foundClass.save();
-    res.status(200).send('Joined class successfully');
+      const { studentId, classIdentifier } = req.body;
+      const foundClass = await Class.findOne({ identifier: classIdentifier });
+      if (!foundClass) {
+          return res.status(404).send('Class not found');
+      }
+      const isAlreadyEnrolled = foundClass.students.some(student => student.studentId === studentId);
+      if (isAlreadyEnrolled) {
+          return res.status(400).send('Student already enrolled in this class');
+      }
+      const student = await Student.findOne({ studentId: studentId });
+      if (!student) {
+          return res.status(404).send('Student not found');
+      }
+      foundClass.students.push({ studentId, score: null });
+      await foundClass.save();
+      student.classes.push({ classId: foundClass._id, score: null });
+      await student.save();
+      res.status(200).send('Joined class successfully');
   } catch (error) {
-    res.status(500).send('Error joining class: ' + error.message);
+      res.status(500).send('Error joining class: ' + error.message);
   }
-  });
+});
   
   module.exports = router;
