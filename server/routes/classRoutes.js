@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Class = require('../models/classModel');
+const Student = require('../models/studentModel');
 const calculateDistribution = require('../utility/gradeDistribution');
 
 router.post('/create', async (req, res) => {
