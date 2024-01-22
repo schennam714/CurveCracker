@@ -72,8 +72,8 @@ router.put('/update', async (req, res) => {
 
 router.get('/distribution/:classId/:studentId', async (req, res) => {
     try {
-        const { classId, studentId } = req.params;
-        const classData = await Class.findById(classId);
+        const { classIdentifier, studentId } = req.params;
+        const classData = await Class.findOne({ identifier: classIdentifier });
 
         if (!classData) {
             return res.status(404).send('Class not found');
