@@ -1,0 +1,37 @@
+.classes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .class-box {
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    width: 300px; /* or any other width according to your layout */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .class-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .class-identifier {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  .leave-class-btn {
+    background-color: #f56565; /* A red color, for example */
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .leave-class-btn:hover {
+    background-color: #c53030; /* Darker red on hover */
+  }
