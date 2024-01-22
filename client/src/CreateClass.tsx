@@ -30,11 +30,28 @@ const CreateClass: React.FC<CreateClassProps> = ({ studentEmail, refreshClasses 
   if (studentEmail !== "schennam@utexas.edu") return null;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Class Name" />
-      <input type="text" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Identifier" />
-      <button type="submit">Create Class</button>
-    </form>
+    <div className='form-container'>
+      <h2 className="form-title">Create Class</h2>
+      <form onSubmit={handleSubmit} className="form-field">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Class Name"
+          className="form-input mb-4"
+        />
+        <input
+          type="text"
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+          placeholder="Identifier"
+          className="form-input mb-4"
+        />
+        <button type="submit" className="form-button">Create Class</button>
+      </form>
+      {successMessage && <div className="success-message">{successMessage}</div>}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+    </div>
   );
 };
 

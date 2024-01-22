@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css';
 
 interface JoinClassProps {
   studentId: string;
-  refreshClasses: () => void; // Function to refresh the class list
+  refreshClasses: () => void; 
 }
 
 const JoinClass: React.FC<JoinClassProps> = ({ studentId, refreshClasses }) => {
@@ -20,17 +21,18 @@ const JoinClass: React.FC<JoinClassProps> = ({ studentId, refreshClasses }) => {
       await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/class/join', { studentId, classIdentifier: identifier });
       setSuccessMessage('Successfully joined the class.');
       setIdentifier('');
-      refreshClasses(); // Refresh the class list on successful join
+      refreshClasses(); 
     } catch (error: any) {
       setErrorMessage('Error joining class: ' + (error.response?.data || error.message));
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Class Identifier" />
-        <button type="submit">Join Class</button>
+    <div className='form-container'>
+      <h2 className="form-title">Join Class</h2>
+      <form onSubmit={handleSubmit} className="form-field">
+        <input type="text" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Class Identifier" className='form-input'/>
+        <button type="submit" className='form-button'>Join Class</button>
       </form>
       {successMessage && <div className="success-message">{successMessage}</div>}
       {errorMessage && <div className="error-message">{errorMessage}</div>}

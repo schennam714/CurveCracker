@@ -2,7 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import CreateClass from './CreateClass';
 import JoinClass from './JoinClass';
+import { useAuth } from './Authcontext';
 import './Dashboard.css'
+import { useNavigate } from 'react-router-dom';
 
 interface ClassData {
     classId: string;
@@ -37,17 +39,28 @@ const Dashboard: React.FC = () => {
     } catch (error) {
         console.error('Error leaving class', error);
     }
-};
+  };
+
+  const { setIsLoggedIn } = useAuth(); // Access the setIsLoggedIn function from context
+  const nav = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('studentEmail');
+    setIsLoggedIn(false);
+    nav('/');
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <h1>Your Classes</h1>
+      <h1 className='your-classes-header'>Your Classes</h1>
+      <button onClick={handleLogout} className="logout-button">Logout</button>
       <div className='classes-container'>
         {classes.map((classData) => (
           <div key={classData.classId} className="class-box">
             <h3 className='class-title'>{classData.className}</h3>
             <p className="class-identifier">{classData.identifier}</p>
-            <button onClick={() => handleLeaveClass(classData.identifier)}>Leave Class</button>
+            <button className='leave-class-btn' onClick={() => handleLeaveClass(classData.identifier)}>Leave Class</button>
           </div>
         ))}
       </div>

@@ -6,7 +6,6 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [studentId, setStudentId] = useState('');
-  // Additional state as needed
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
