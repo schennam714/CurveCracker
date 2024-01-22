@@ -117,5 +117,26 @@ router.get('/classes/:studentId', async (req, res) => {
         res.status(500).send('Server error: ' + error.message);
     }
 });
+
+router.post('/leave', async (req, res) => {
+    try {
+        const { studentId, classIdentifier } = req.body;
+
+        const foundClass = await Class.findOne({ identifier: classIdentifier });
+        if (!foundClass) {
+            return res.status(404).send('Class not found');
+        }
+        foundClass.students = foundClass.students.filter(student => student.studentId !== studentId);
+        await foundClass.save();
+        const student = await Student.findOne({ studentId: studentId });
+        if (student) {
+            student.classes = student.classes.filter(classItem => classItem.classId.toString() !== foundClass._id.toString());
+            await student.save();
+        }
+        res.status(200).send('Left class successfully');
+    } catch (error) {
+        res.status(500).send('Error leaving class: ' + error.message);
+    }
+});
 module.exports = router;
   
