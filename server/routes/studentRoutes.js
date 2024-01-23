@@ -70,7 +70,7 @@ router.put('/update', async (req, res) => {
   }
 });
 
-router.get('/distribution/:classId/:studentId', async (req, res) => {
+router.get('/distribution/:classIdentifier/:studentId', async (req, res) => {
     try {
         const { classIdentifier, studentId } = req.params;
         const classData = await Class.findOne({ identifier: classIdentifier });
