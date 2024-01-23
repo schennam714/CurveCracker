@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const { setIsLoggedIn } = useAuth(); // Access the setIsLoggedIn function from context
+  const { setIsLoggedIn } = useAuth(); 
   const nav = useNavigate();
 
   const handleLogout = () => {
@@ -58,7 +58,8 @@ const Dashboard: React.FC = () => {
       <div className='classes-container'>
         {classes.map((classData) => (
           <div key={classData.classId} className="class-box">
-            <h3 className='class-title'>{classData.className}</h3>
+            <button onClick={() => nav(`/class/${classData.identifier}`)}> Access Grades </button>
+            <h3 className='class-title'>{classData.className} </h3>
             <p className="class-identifier">{classData.identifier}</p>
             <button className='leave-class-btn' onClick={() => handleLeaveClass(classData.identifier)}>Leave Class</button>
           </div>
