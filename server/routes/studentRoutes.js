@@ -5,9 +5,9 @@ const Student = require('../models/studentModel');
 const calculateDistribution = require('../utility/gradeDistribution');
 router.post('/submitScore', async (req, res) => {
     try {
-        const { studentId, classId, score } = req.body;
+        const { studentId, classIdentifier, score } = req.body;
         const classData = await Class.findOneAndUpdate(
-            { "_id": classId, "students.studentId": studentId },
+            { "identifier": classIdentifier, "students.studentId": studentId },
             { "$set": { "students.$.score": score } },
             { new: true }
         );
@@ -22,10 +22,10 @@ router.post('/submitScore', async (req, res) => {
     }
 });
 
-router.get('/viewScores/:classId', async (req, res) => {
+router.get('/viewScores/:classIdentifier', async (req, res) => {
     try {
-        const { classId } = req.params;
-        const classData = await Class.findById(classId);
+        const { classIdentifier } = req.params;
+        const classData = await Class.findOne({ identifier: classIdentifier });
 
         if (!classData || classData.students.length === 0) {
             return res.status(404).send('No students found for this class');
