@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const EncryptedScoreSchema = require('./encryptedScoreSchema');
+const EncryptedScoreSchema = require('./encryptModel');
 
 const ClassSchema = new mongoose.Schema({
   name: {
