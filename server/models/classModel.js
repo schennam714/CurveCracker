@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const EncryptedScoreSchema = require('./encryptedScoreSchema');
 
 const ClassSchema = new mongoose.Schema({
   name: {
@@ -12,7 +13,7 @@ const ClassSchema = new mongoose.Schema({
   },
   students: [{
     studentId: String,
-    score: Number
+    score: EncryptedScoreSchema
   }]
 });
 

@@ -3,12 +3,14 @@ const router = express.Router();
 const Class = require('../models/classModel');
 const Student = require('../models/studentModel');
 const calculateDistribution = require('../utility/gradeDistribution');
+const { encrypt, decrypt } = require('../utility/security');
 router.post('/submitScore', async (req, res) => {
     try {
         const { studentId, classIdentifier, score } = req.body;
+        const encryptedScore = encrypt(score.toString);
         const classData = await Class.findOneAndUpdate(
             { "identifier": classIdentifier, "students.studentId": studentId },
-            { "$set": { "students.$.score": score } },
+            { "$set": { "students.$.score": encryptedScore } },
             { new: true }
         );
 
@@ -35,7 +37,7 @@ router.get('/viewScores/:classIdentifier', async (req, res) => {
                             .filter(s => s.score != null)
                             .map(s => ({
                                 studentId: s.studentId,
-                                score: s.score
+                                score: Number(decrypt(s.score))
                             }));
 
         res.status(200).json(scoreData);
@@ -81,7 +83,7 @@ router.get('/distribution/:classIdentifier/:studentId', async (req, res) => {
 
         const scores = classData.students
                         .filter(s => s.score != null)
-                        .map(s => s.score);
+                        .map(s => Number(decrypt(s.score)));
         const distribution = calculateDistribution(scores);
 
         const studentEntry = classData.students.find(s => s.studentId === studentId);
