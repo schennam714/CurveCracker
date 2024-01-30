@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Plot from 'react-plotly.js';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Authcontext';
 
 interface DistributionData {
   score: number;
@@ -88,13 +90,22 @@ const ClassPage: React.FC = () => {
         classIdentifier,
         score
       });
-      console.log(response.data);
       await fetchDistribution();
       await fetchClassScores();
     } catch (error) {
       console.error('Error submitting score:', error);
       // Handle error later in JSX
     }
+  };
+
+  const { setIsLoggedIn } = useAuth(); 
+  const nav = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('studentEmail');
+    setIsLoggedIn(false);
+    nav('/');
   };
 
   return (
@@ -134,6 +145,7 @@ const ClassPage: React.FC = () => {
           />
         </div>
       )}
+  <button onClick={handleLogout} className="logout-button">Logout</button>
     </div>
   );
 };
