@@ -108,7 +108,19 @@ router.get('/distribution/:classIdentifier/:studentId', async (req, res) => {
             return res.status(404).send('Student not found in class');
         }
 
-        const studentRank = distribution.find(d => d.score === studentEntry.score);
+        let studentDecryptedScore;
+        try {
+            studentDecryptedScore = Number(decrypt(studentEntry.score));
+        } catch (error) {
+            console.error('Decryption error for student score:', error);
+            return res.status(500).send('Error decrypting student score');
+        }
+
+        const studentRank = distribution.find(d => d.score === studentDecryptedScore);
+        if (!studentRank) {
+            return res.status(404).send('Student rank not found');
+        }
+
         res.status(200).json(studentRank);
     } catch (error) {
         console.error('Error calculating distribution:', error);
