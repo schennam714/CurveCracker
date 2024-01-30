@@ -7,7 +7,7 @@ const { encrypt, decrypt } = require('../utility/security');
 router.post('/submitScore', async (req, res) => {
     try {
         const { studentId, classIdentifier, score } = req.body;
-        const encryptedScore = encrypt(score.toString);
+        const encryptedScore = encrypt(score.toString());
         const classData = await Class.findOneAndUpdate(
             { "identifier": classIdentifier, "students.studentId": studentId },
             { "$set": { "students.$.score": encryptedScore } },
