@@ -99,11 +99,17 @@ router.get('/distribution/:classIdentifier/:studentId', async (req, res) => {
                                        return null;
                                    }
                                })
-                               .filter(score => score != null); // Filter out any null or failed decryption scores
+                               .filter(score => score != null); 
 
         const distribution = calculateDistribution(decryptedScores);
 
-        // ... rest of your endpoint logic
+        const studentEntry = classData.students.find(s => s.studentId === studentId);
+        if (!studentEntry) {
+            return res.status(404).send('Student not found in class');
+        }
+
+        const studentRank = distribution.find(d => d.score === studentEntry.score);
+        res.status(200).json(studentRank);
     } catch (error) {
         console.error('Error calculating distribution:', error);
         res.status(500).send('Error calculating distribution: ' + error.message);
