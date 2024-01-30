@@ -17,10 +17,17 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => localStorage.getItem('isLoggedIn') === 'true'
+  );
+
+  const handleSetIsLoggedIn = (status: boolean) => {
+    setIsLoggedIn(status);
+    localStorage.setItem('isLoggedIn', status.toString());
+  };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn: handleSetIsLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

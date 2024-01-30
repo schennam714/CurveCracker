@@ -104,6 +104,7 @@ const ClassPage: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('studentId');
     localStorage.removeItem('studentEmail');
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
     nav('/');
   };
