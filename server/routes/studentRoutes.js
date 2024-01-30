@@ -35,10 +35,19 @@ router.get('/viewScores/:classIdentifier', async (req, res) => {
 
         const scoreData = classData.students
                             .filter(s => s.score != null)
-                            .map(s => ({
-                                studentId: s.studentId,
-                                score: Number(decrypt(s.score))
-                            }));
+                            .map(s => {
+                                try {
+                                    const decryptedScore = decrypt(s.score);
+                                    return {
+                                        studentId: s.studentId,
+                                        score: Number(decryptedScore)
+                                    };
+                                } catch (error) {
+                                    console.error('Decryption error:', error);
+                                    return null; 
+                                }
+                            })
+                            .filter(s => s != null);
         res.status(200).json(scoreData);
     } catch (error) {
         res.status(500).send('Error retrieving scores: ' + error.message);
