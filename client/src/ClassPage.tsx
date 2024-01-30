@@ -19,28 +19,23 @@ const ClassPage: React.FC = () => {
   const [distribution, setDistribution] = useState<DistributionData | null>(null);
   const [score, setScore] = useState('');
   const studentId = localStorage.getItem('studentId') || '';
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [classScores, setClassScores] = useState<ScoreData[]>([]);
   const [plotData, setPlotData] = useState<any[]>([]);
   const [plotLayout, setPlotLayout] = useState({});
 
   const fetchDistribution = useCallback(async () => {
     try {
-      setIsLoading(true);
       console.log("Class identifier" + classIdentifier);
-      const response = await axios.get(`https://curvecracker-c4e9470535d7.herokuapp.com/api/student/distribution/${classIdentifier}/${studentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/student/distribution/${classIdentifier}/${studentId}`);
       setDistribution(response.data);
     } catch (error) {
       console.error('Error fetching distribution', error);
-    }
-    finally {
-        setIsLoading(false);
     }
   }, [classIdentifier, studentId]);
 
   const fetchClassScores = useCallback(async () => {
     try {
-      const response = await axios.get(`https://curvecracker-c4e9470535d7.herokuapp.com/api/student/viewScores/${classIdentifier}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/student/viewScores/${classIdentifier}`);
       setClassScores(response.data);
     } catch (error) {
       console.error('Error fetching class scores', error);
@@ -88,7 +83,7 @@ const ClassPage: React.FC = () => {
       const studentId = localStorage.getItem('studentId');
       if (!studentId) throw new Error('Student ID missing');
 
-      const response = await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/student/submitScore/', {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/student/submitScore/`, {
         studentId,
         classIdentifier,
         score
@@ -107,7 +102,7 @@ const ClassPage: React.FC = () => {
   {distribution ? (
     <div>
       <h1 className="text-2xl font-bold mb-4">Your Performance</h1>
-      <p className="mb-2 text-lg">Score: <span className="font-semibold">{distribution.score}</span></p>
+      <p className="mb-2 text-lg">Overall Grade: <span className="font-semibold">{distribution.score}</span></p>
       <p className="mb-2 text-lg">Rank: <span className="font-semibold">{distribution.rank}</span></p>
       <p className="mb-4 text-lg">Percentile: <span className="font-semibold">{distribution.percentile.toFixed(2)}%</span></p>
     </div>

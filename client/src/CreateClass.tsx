@@ -16,7 +16,7 @@ const CreateClass: React.FC<CreateClassProps> = ({ studentEmail, refreshClasses 
     e.preventDefault();
     if (studentEmail === "schennam@utexas.edu") {
       try {
-        await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/class/create', { name, identifier });
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/class/create`, { name, identifier });
         setSuccessMessage('Class created successfully.');
         refreshClasses();
         setName('');

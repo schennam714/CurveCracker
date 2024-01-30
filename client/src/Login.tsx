@@ -16,7 +16,7 @@ const Login: React.FC = () => {
     setError('');
 
     try {
-      const response = await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/user/login', {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/user/login`, {
         email,
         password
       });

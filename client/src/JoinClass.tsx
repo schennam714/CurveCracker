@@ -18,7 +18,7 @@ const JoinClass: React.FC<JoinClassProps> = ({ studentId, refreshClasses }) => {
     setErrorMessage('');
 
     try {
-      await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/class/join', { studentId, classIdentifier: identifier });
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/class/join`, { studentId, classIdentifier: identifier });
       setSuccessMessage('Successfully joined the class.');
       setIdentifier('');
       refreshClasses(); 

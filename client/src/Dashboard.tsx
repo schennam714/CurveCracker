@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
 
   const fetchClasses = useCallback(async () => {
     try {
-      const response = await axios.get(`https://curvecracker-c4e9470535d7.herokuapp.com/api/student/classes/${studentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/student/classes/${studentId}`);
       setClasses(response.data);
       console.log(response.data);
     } catch (error) {
@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
 
   const handleLeaveClass = async (classIdentifier: string) => {
     try {
-        await axios.post('https://curvecracker-c4e9470535d7.herokuapp.com/api/student/leave', { studentId, classIdentifier });
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/student/leave`, { studentId, classIdentifier });
         fetchClasses(); 
     } catch (error) {
         console.error('Error leaving class', error);
