@@ -39,7 +39,7 @@ router.get('/viewScores/:classIdentifier', async (req, res) => {
                                 studentId: s.studentId,
                                 score: Number(decrypt(s.score))
                             }));
-
+        console.log(scoreData);
         res.status(200).json(scoreData);
     } catch (error) {
         res.status(500).send('Error retrieving scores: ' + error.message);
